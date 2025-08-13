@@ -275,6 +275,24 @@
             font-size: 0.9em;
             line-height: 1.5;
         }
+
+        .historical-note {
+            background: #f7fafc;
+            border-left: 3px solid #a78bfa;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        .zone-info {
+            color: #718096;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -330,6 +348,156 @@
                 return 'light';
             }
             return 'none';
+        }
+
+        function getHistoricalFrostDates(latitude) {
+            // Estimate frost dates based on latitude zones (Northern Hemisphere)
+            // These are approximate averages - actual dates vary by microclimate
+            
+            const absLat = Math.abs(latitude);
+            
+            // Define frost date zones
+            let firstFrostDate, lastFrostDate, zoneName;
+            
+            if (absLat >= 50) {
+                // Northern zones (Canada, Northern US)
+                firstFrostDate = { month: 9, day: 15 };  // Sept 15
+                lastFrostDate = { month: 5, day: 15 };   // May 15
+                zoneName = "Northern Zone (Similar to: Northern Canada, Alaska)";
+            } else if (absLat >= 45) {
+                // Northern US (Minnesota, Wisconsin, Maine)
+                firstFrostDate = { month: 10, day: 1 };  // Oct 1
+                lastFrostDate = { month: 5, day: 1 };    // May 1
+                zoneName = "Upper North Zone (Similar to: Minnesota, Wisconsin, Maine)";
+            } else if (absLat >= 42) {
+                // Mid-Northern US (Mass, Michigan, Oregon)
+                firstFrostDate = { month: 10, day: 15 }; // Oct 15
+                lastFrostDate = { month: 4, day: 20 };   // April 20
+                zoneName = "Mid-North Zone (Similar to: Massachusetts, Michigan, Oregon)";
+            } else if (absLat >= 38) {
+                // Central US (Kansas, Virginia, Northern California)
+                firstFrostDate = { month: 10, day: 25 }; // Oct 25
+                lastFrostDate = { month: 4, day: 10 };   // April 10
+                zoneName = "Central Zone (Similar to: Kansas, Virginia, N. California)";
+            } else if (absLat >= 35) {
+                // Southern-Central US (Tennessee, North Carolina)
+                firstFrostDate = { month: 11, day: 5 };  // Nov 5
+                lastFrostDate = { month: 3, day: 25 };   // March 25
+                zoneName = "South-Central Zone (Similar to: Tennessee, North Carolina)";
+            } else if (absLat >= 32) {
+                // Southern US (Georgia, Texas, Arizona)
+                firstFrostDate = { month: 11, day: 20 }; // Nov 20
+                lastFrostDate = { month: 3, day: 10 };   // March 10
+                zoneName = "Southern Zone (Similar to: Georgia, Central Texas, Arizona)";
+            } else if (absLat >= 28) {
+                // Deep South (Florida panhandle, Southern Texas)
+                firstFrostDate = { month: 12, day: 10 }; // Dec 10
+                lastFrostDate = { month: 2, day: 20 };   // Feb 20
+                zoneName = "Deep South Zone (Similar to: N. Florida, S. Texas)";
+            } else {
+                // Tropical/Subtropical (Southern Florida, Hawaii)
+                firstFrostDate = null; // Rarely or never frosts
+                lastFrostDate = null;
+                zoneName = "Tropical/Subtropical Zone";
+            }
+            
+            // For Southern Hemisphere, reverse the dates (approximate)
+            if (latitude < 0 && firstFrostDate) {
+                // Swap and adjust months for Southern Hemisphere
+                const tempFirst = { ...firstFrostDate };
+                const tempLast = { ...lastFrostDate };
+                
+                // Offset by 6 months
+                firstFrostDate = { 
+                    month: (tempLast.month + 6) > 12 ? (tempLast.month - 6) : (tempLast.month + 6),
+                    day: tempLast.day 
+                };
+                lastFrostDate = { 
+                    month: (tempFirst.month + 6) > 12 ? (tempFirst.month - 6) : (tempFirst.month + 6),
+                    day: tempFirst.day 
+                };
+                zoneName = zoneName + " (S. Hemisphere adjusted)";
+            }
+            
+            return { 
+                firstFrost: firstFrostDate, 
+                lastFrost: lastFrostDate,
+                zone: zoneName
+            };
+        }
+
+        function calculateDaysToHistoricalFrost(latitude) {
+            const today = new Date();
+            const currentMonth = today.getMonth() + 1; // JavaScript months are 0-indexed
+            const currentDay = today.getDate();
+            const currentYear = today.getFullYear();
+            
+            const frostDates = getHistoricalFrostDates(latitude);
+            
+            if (!frostDates.firstFrost) {
+                return { type: 'none', message: 'Your location rarely experiences frost.', zone: frostDates.zone };
+            }
+            
+            // Determine if we're approaching first frost (fall) or last frost (spring)
+            // If it's April through August, show last frost info
+            // If it's September through March, show first frost info
+            
+            let targetDate, frostType, frostDateStr;
+            
+            if (currentMonth >= 4 && currentMonth <= 8) {
+                // Spring/Summer - talk about last frost that passed or next year's
+                const lastFrostThisYear = new Date(currentYear, frostDates.lastFrost.month - 1, frostDates.lastFrost.day);
+                
+                if (today < lastFrostThisYear) {
+                    // Last frost hasn't happened yet this spring
+                    const daysUntil = Math.ceil((lastFrostThisYear - today) / (1000 * 60 * 60 * 24));
+                    return {
+                        type: 'upcoming_last',
+                        date: lastFrostThisYear,
+                        days: daysUntil,
+                        message: `Historical last spring frost: ~${lastFrostThisYear.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} (${daysUntil} days away)`,
+                        zone: frostDates.zone
+                    };
+                } else {
+                    // We're past last frost, show first frost
+                    targetDate = new Date(currentYear, frostDates.firstFrost.month - 1, frostDates.firstFrost.day);
+                    frostType = 'first';
+                    frostDateStr = targetDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+            } else {
+                // Fall/Winter - show first frost
+                targetDate = new Date(currentYear, frostDates.firstFrost.month - 1, frostDates.firstFrost.day);
+                
+                // If first frost date has passed this year, show next year's last frost
+                if (today > targetDate) {
+                    targetDate = new Date(currentYear + 1, frostDates.lastFrost.month - 1, frostDates.lastFrost.day);
+                    frostType = 'last_next_year';
+                    frostDateStr = targetDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                } else {
+                    frostType = 'first';
+                    frostDateStr = targetDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+            }
+            
+            const daysUntil = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
+            
+            if (frostType === 'first') {
+                return {
+                    type: 'upcoming_first',
+                    date: targetDate,
+                    days: daysUntil,
+                    message: `Historical first fall frost: ~${frostDateStr} (${daysUntil} days away)`,
+                    zone: frostDates.zone
+                };
+            } else {
+                return {
+                    type: 'upcoming_last_next',
+                    date: targetDate,
+                    days: daysUntil,
+                    message: `Historical last spring frost (next year): ~${frostDateStr} (${daysUntil} days away)`,
+                    zone: frostDates.zone
+                };
+            }
         }
 
         async function checkWeather() {
@@ -438,6 +606,22 @@
                     const frostDateFormatted = formatDate(nextFrostDate);
                     const freezeTypeText = nextFrostType === 'hard' ? 'Hard Freeze' : 'Light Freeze';
                     
+                    // Get historical context
+                    const historicalFrost = calculateDaysToHistoricalFrost(userLat);
+                    const nextFrostDateObj = new Date(nextFrostDate);
+                    let historicalContext = '';
+                    
+                    if (historicalFrost.type === 'upcoming_first' || historicalFrost.type === 'upcoming_last') {
+                        const daysDiff = Math.abs(Math.ceil((nextFrostDateObj - historicalFrost.date) / (1000 * 60 * 60 * 24)));
+                        if (daysDiff <= 7) {
+                            historicalContext = '<br><em>This is right on schedule with historical averages.</em>';
+                        } else if (nextFrostDateObj < historicalFrost.date) {
+                            historicalContext = `<br><em>This is ${daysDiff} days earlier than historical average!</em>`;
+                        } else {
+                            historicalContext = `<br><em>This is ${daysDiff} days later than historical average.</em>`;
+                        }
+                    }
+                    
                     statusHTML = `
                         <div class="status-card alert-warning">
                             <div class="status-icon">⚠️</div>
@@ -446,20 +630,67 @@
                                 No freeze tonight, but <strong>${freezeTypeText}</strong> expected:
                                 <br><strong>${frostDateFormatted}</strong>
                                 <br>Low of ${Math.round(nextFrostTemp)}°F
+                                ${historicalContext}
                             </div>
                         </div>
                     `;
                 } else {
+                    // Get historical frost prediction
+                    const historicalFrost = calculateDaysToHistoricalFrost(userLat);
+                    
                     statusHTML = `
                         <div class="status-card alert-safe">
                             <div class="status-icon">✅</div>
                             <div class="status-message">No Frost Risk</div>
                             <div class="status-details">
                                 Your garden is safe! No freezing temperatures in the 10-day forecast.
-                                <br>Enjoy your gardening!
+                                ${historicalFrost.type !== 'none' ? `<br><br><strong>📊 ${historicalFrost.message}</strong>` : ''}
+                                ${historicalFrost.type === 'upcoming_first' ? '<br><em>Start planning for winter crop protection!</em>' : ''}
+                                ${historicalFrost.type === 'upcoming_last' ? '<br><em>Wait to plant tender crops until after this date.</em>' : ''}
                             </div>
                         </div>
                     `;
+                    
+                    // Add historical context 
+                    if (historicalFrost.type !== 'none') {
+                        if (historicalFrost.days <= 45) {
+                            // Show detailed planning info if frost is within 45 days
+                            tipsContainer.innerHTML = `
+                                <div class="tips">
+                                    <h3>📅 Historical Frost Planning:</h3>
+                                    <div class="plant-info">
+                                        <h4>Your Frost Zone (Latitude: ${userLat.toFixed(1)}°)</h4>
+                                        <p class="zone-info">${historicalFrost.zone}</p>
+                                        <p>
+                                            ${historicalFrost.type === 'upcoming_first' ? 
+                                            `Your area typically gets its first fall frost around <strong>${historicalFrost.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</strong>. 
+                                            While weather patterns vary year to year, this is a good time to:
+                                            <br>• Start harvesting tender crops
+                                            <br>• Prepare frost protection supplies
+                                            <br>• Plant cold-hardy vegetables for winter harvest` :
+                                            `Your area typically gets its last spring frost around <strong>${historicalFrost.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</strong>.
+                                            <br>• Wait until after this date to plant tomatoes, peppers, and basil
+                                            <br>• Start seeds indoors 6-8 weeks before this date
+                                            <br>• Cold-hardy crops can go out 2-4 weeks earlier`
+                                            }
+                                        </p>
+                                    </div>
+                                    <p style="color: #718096; font-size: 0.85em; margin-top: 10px;">
+                                        <em>Note: These are historical averages based on latitude. Actual frost dates vary by microclimate, elevation, and yearly weather patterns. 
+                                        Urban areas and south-facing slopes typically frost later in fall and earlier in spring.</em>
+                                    </p>
+                                </div>
+                            `;
+                        } else {
+                            // Show simplified zone info for dates further out
+                            tipsContainer.innerHTML = `
+                                <div class="historical-note">
+                                    <strong>Your Frost Zone:</strong> ${historicalFrost.zone}
+                                    <br><em style="font-size: 0.9em;">Keep checking back as your historical frost date approaches for planning tips!</em>
+                                </div>
+                            `;
+                        }
+                    }
                 }
 
                 statusHTML += `
