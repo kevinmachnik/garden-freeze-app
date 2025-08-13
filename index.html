@@ -14,7 +14,7 @@
 
 ```
     body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         display: flex;
@@ -287,7 +287,7 @@
             userLat = position.coords.latitude;
             userLon = position.coords.longitude;
 
-            locationInfo.innerHTML = `📍 Location: ${userLat.toFixed(2)}°, ${userLon.toFixed(2)}°`;
+            locationInfo.innerHTML = `Location: ${userLat.toFixed(2)}°, ${userLon.toFixed(2)}°`;
             statusContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Checking weather forecast...</div>';
 
             // Fetch weather data from Open-Meteo API (free, no API key needed)
