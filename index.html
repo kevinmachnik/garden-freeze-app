@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,438 +11,563 @@
             box-sizing: border-box;
         }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
 
-    .container {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        padding: 40px;
-        max-width: 500px;
-        width: 100%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(10px);
-    }
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
 
-    h1 {
-        text-align: center;
-        color: #2d3748;
-        margin-bottom: 10px;
-        font-size: 2em;
-    }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
 
-    .subtitle {
-        text-align: center;
-        color: #718096;
-        margin-bottom: 30px;
-        font-size: 0.9em;
-    }
+        .status-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-    .status-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
+        .status-card:hover {
+            transform: translateY(-2px);
+        }
 
-    .status-card:hover {
-        transform: translateY(-2px);
-    }
+        .alert-safe {
+            border-left: 5px solid #48bb78;
+            background: linear-gradient(90deg, rgba(72, 187, 120, 0.1) 0%, transparent 100%);
+        }
 
-    .alert-safe {
-        border-left: 5px solid #48bb78;
-        background: linear-gradient(90deg, rgba(72, 187, 120, 0.1) 0%, transparent 100%);
-    }
+        .alert-light-freeze {
+            border-left: 5px solid #f6ad55;
+            background: linear-gradient(90deg, rgba(246, 173, 85, 0.1) 0%, transparent 100%);
+            animation: pulse 2s infinite;
+        }
 
-    .alert-warning {
-        border-left: 5px solid #f6ad55;
-        background: linear-gradient(90deg, rgba(246, 173, 85, 0.1) 0%, transparent 100%);
-        animation: pulse 2s infinite;
-    }
+        .alert-hard-freeze {
+            border-left: 5px solid #fc8181;
+            background: linear-gradient(90deg, rgba(252, 129, 129, 0.2) 0%, transparent 100%);
+            animation: pulse 1.5s infinite;
+        }
 
-    .alert-danger {
-        border-left: 5px solid #fc8181;
-        background: linear-gradient(90deg, rgba(252, 129, 129, 0.2) 0%, transparent 100%);
-        animation: pulse 1.5s infinite;
-    }
+        .alert-warning {
+            border-left: 5px solid #a78bfa;
+            background: linear-gradient(90deg, rgba(167, 139, 250, 0.1) 0%, transparent 100%);
+        }
 
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.9; }
-    }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
 
-    .status-icon {
-        font-size: 3em;
-        text-align: center;
-        margin-bottom: 15px;
-    }
+        .status-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
-    .status-message {
-        font-size: 1.2em;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 10px;
-    }
+        .status-message {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
 
-    .status-details {
-        color: #4a5568;
-        line-height: 1.6;
-    }
+        .status-details {
+            color: #4a5568;
+            line-height: 1.6;
+        }
 
-    .temperature-display {
-        display: flex;
-        justify-content: space-around;
-        margin: 20px 0;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
+        .temperature-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
 
-    .temp-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        text-align: center;
-        flex: 1;
-        min-width: 120px;
-    }
+        .temp-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
 
-    .temp-label {
-        font-size: 0.85em;
-        opacity: 0.9;
-        margin-bottom: 5px;
-    }
+        .temp-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
 
-    .temp-value {
-        font-size: 1.8em;
-        font-weight: bold;
-    }
+        .temp-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
 
-    .location-info {
-        text-align: center;
-        color: #718096;
-        margin-bottom: 20px;
-        font-size: 0.9em;
-    }
+        .location-info {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
 
-    .check-button {
-        width: 100%;
-        padding: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+        .check-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .check-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-    }
+        .check-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
 
-    .check-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+        .check-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-    .loading {
-        text-align: center;
-        color: #718096;
-        padding: 20px;
-    }
+        .loading {
+            text-align: center;
+            color: #718096;
+            padding: 20px;
+        }
 
-    .spinner {
-        border: 3px solid #f3f4f6;
-        border-top: 3px solid #667eea;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        margin: 20px auto;
-    }
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
 
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-    .error {
-        background: #fed7d7;
-        color: #c53030;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
 
-    .forecast-hours {
-        margin-top: 20px;
-        max-height: 200px;
-        overflow-y: auto;
-        padding: 10px;
-        background: #f7fafc;
-        border-radius: 10px;
-    }
+        .forecast-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
 
-    .hour-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid #e2e8f0;
-    }
+        .forecast-card h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
 
-    .hour-item:last-child {
-        border-bottom: none;
-    }
+        .frost-date {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
 
-    .freezing-hour {
-        color: #c53030;
-        font-weight: 600;
-    }
+        .frost-details {
+            color: #4a5568;
+            line-height: 1.6;
+        }
 
-    .tips {
-        background: #f7fafc;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-    }
+        .freeze-type-info {
+            background: #fff;
+            border-left: 3px solid #667eea;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
 
-    .tips h3 {
-        color: #2d3748;
-        margin-bottom: 10px;
-        font-size: 1.1em;
-    }
+        .freeze-type-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
 
-    .tips ul {
-        color: #4a5568;
-        padding-left: 20px;
-    }
+        .freeze-type-desc {
+            color: #4a5568;
+            font-size: 0.9em;
+        }
 
-    .tips li {
-        margin-bottom: 8px;
-    }
-</style>
+        .tips {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
 
+        .tips h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
 
+        .tips ul {
+            color: #4a5568;
+            padding-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 8px;
+        }
+
+        .plant-info {
+            background: #e6fffa;
+            border-left: 3px solid #38b2ac;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .plant-info h4 {
+            color: #234e52;
+            margin-bottom: 8px;
+        }
+
+        .plant-info p {
+            color: #2c7a7b;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>🌱 Garden Frost Alert</h1>
         <p class="subtitle">Protect your crops from freezing temperatures</p>
+        
+        <div class="location-info" id="locationInfo">
+            Click below to check your local forecast
+        </div>
 
+        <div id="statusContainer"></div>
+        
+        <button class="check-button" id="checkButton" onclick="checkWeather()">
+            Check Frost Risk (10-Day Forecast)
+        </button>
 
-    <div class="location-info" id="locationInfo">
-        Click below to check your local forecast
+        <div id="forecastContainer"></div>
+        
+        <div id="tipsContainer"></div>
     </div>
 
-    <div id="statusContainer"></div>
-    
-    <button class="check-button" id="checkButton" onclick="checkWeather()">
-        Check Frost Risk Now
-    </button>
+    <script>
+        let userLat = null;
+        let userLon = null;
 
-    <div id="forecastContainer"></div>
-    
-    <div id="tipsContainer"></div>
-</div>
-
-<script>
-    let userLat = null;
-    let userLon = null;
-
-    async function checkWeather() {
-        const button = document.getElementById('checkButton');
-        const statusContainer = document.getElementById('statusContainer');
-        const locationInfo = document.getElementById('locationInfo');
-        const forecastContainer = document.getElementById('forecastContainer');
-        const tipsContainer = document.getElementById('tipsContainer');
-        
-        button.disabled = true;
-        statusContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Getting your location...</div>';
-        forecastContainer.innerHTML = '';
-        tipsContainer.innerHTML = '';
-
-        try {
-            // Get user location
-            const position = await new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    timeout: 10000,
-                    enableHighAccuracy: true
-                });
-            });
-
-            userLat = position.coords.latitude;
-            userLon = position.coords.longitude;
-
-            locationInfo.innerHTML = `Location: ${userLat.toFixed(2)}°, ${userLon.toFixed(2)}°`;
-            statusContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Checking weather forecast...</div>';
-
-            // Fetch weather data from Open-Meteo API (free, no API key needed)
-            const response = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${userLat}&longitude=${userLon}&hourly=temperature_2m&temperature_unit=fahrenheit&timezone=auto&forecast_days=2`
-            );
-
-            if (!response.ok) throw new Error('Weather service unavailable');
-
-            const data = await response.json();
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
             
-            // Process the next 24 hours of data
-            const now = new Date();
-            const temps = [];
-            const freezingHours = [];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             
-            for (let i = 0; i < 24 && i < data.hourly.time.length; i++) {
-                const time = new Date(data.hourly.time[i]);
-                const temp = data.hourly.temperature_2m[i];
-                
-                temps.push(temp);
-                
-                if (temp <= 32) {
-                    freezingHours.push({
-                        time: time.toLocaleTimeString('en-US', { 
-                            hour: 'numeric', 
-                            hour12: true,
-                            weekday: 'short'
-                        }),
-                        temp: Math.round(temp)
+            // Check if it's today or tomorrow
+            if (date.toDateString() === today.toDateString()) {
+                return 'Tonight';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Tomorrow night';
+            }
+            
+            // Calculate days until
+            const daysUntil = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
+            
+            return `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()} (${daysUntil} days away)`;
+        }
+
+        function getFreezeType(temp) {
+            if (temp <= 28) {
+                return 'hard';
+            } else if (temp <= 32) {
+                return 'light';
+            }
+            return 'none';
+        }
+
+        async function checkWeather() {
+            const button = document.getElementById('checkButton');
+            const statusContainer = document.getElementById('statusContainer');
+            const locationInfo = document.getElementById('locationInfo');
+            const forecastContainer = document.getElementById('forecastContainer');
+            const tipsContainer = document.getElementById('tipsContainer');
+            
+            button.disabled = true;
+            statusContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Getting your location...</div>';
+            forecastContainer.innerHTML = '';
+            tipsContainer.innerHTML = '';
+
+            try {
+                // Get user location
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        timeout: 10000,
+                        enableHighAccuracy: true
                     });
-                }
-            }
+                });
 
-            const minTemp = Math.min(...temps);
-            const maxTemp = Math.max(...temps);
-            const currentTemp = temps[0];
+                userLat = position.coords.latitude;
+                userLon = position.coords.longitude;
 
-            // Display status
-            let statusHTML = '';
-            
-            if (freezingHours.length > 0) {
-                statusHTML = `
-                    <div class="status-card alert-danger">
-                        <div class="status-icon">❄️</div>
-                        <div class="status-message">FROST WARNING!</div>
-                        <div class="status-details">
-                            Freezing temperatures expected in the next 24 hours!
-                            <br>Protect your sensitive plants immediately.
-                            <br><strong>${freezingHours.length} hours</strong> at or below freezing.
-                        </div>
-                    </div>
-                `;
+                locationInfo.innerHTML = `📍 Location: ${userLat.toFixed(2)}°, ${userLon.toFixed(2)}°`;
+                statusContainer.innerHTML = '<div class="loading"><div class="spinner"></div>Checking 10-day forecast...</div>';
+
+                // Fetch weather data from Open-Meteo API - now for 10 days
+                const response = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${userLat}&longitude=${userLon}&daily=temperature_2m_max,temperature_2m_min&hourly=temperature_2m&temperature_unit=fahrenheit&timezone=auto&forecast_days=10`
+                );
+
+                if (!response.ok) throw new Error('Weather service unavailable');
+
+                const data = await response.json();
                 
-                // Show protection tips
-                tipsContainer.innerHTML = `
-                    <div class="tips">
-                        <h3>🛡️ Protection Actions:</h3>
-                        <ul>
-                            <li>Cover sensitive plants with frost cloth, sheets, or blankets</li>
-                            <li>Water plants thoroughly before sunset (wet soil holds heat better)</li>
-                            <li>Harvest ripe vegetables and tender herbs</li>
-                            <li>Move potted plants indoors or to a protected area</li>
-                            <li>Add mulch around plant bases for insulation</li>
-                        </ul>
-                    </div>
-                `;
-            } else if (minTemp <= 36) {
-                statusHTML = `
-                    <div class="status-card alert-warning">
-                        <div class="status-icon">⚠️</div>
-                        <div class="status-message">Near-Freezing Alert</div>
-                        <div class="status-details">
-                            Temperatures will drop close to freezing (${Math.round(minTemp)}°F).
-                            <br>Monitor closely and be ready to protect sensitive plants.
-                        </div>
-                    </div>
-                `;
-            } else {
-                statusHTML = `
-                    <div class="status-card alert-safe">
-                        <div class="status-icon">✅</div>
-                        <div class="status-message">No Frost Risk</div>
-                        <div class="status-details">
-                            Your garden is safe! No freezing temperatures expected in the next 24 hours.
-                            <br>Minimum temperature: ${Math.round(minTemp)}°F
-                        </div>
-                    </div>
-                `;
-            }
+                // Check next 24 hours for immediate warnings
+                const next24Hours = [];
+                let hardFreezeIn24 = false;
+                let lightFreezeIn24 = false;
+                
+                for (let i = 0; i < 24 && i < data.hourly.time.length; i++) {
+                    const temp = data.hourly.temperature_2m[i];
+                    next24Hours.push(temp);
+                    
+                    if (temp <= 28) hardFreezeIn24 = true;
+                    else if (temp <= 32) lightFreezeIn24 = true;
+                }
 
-            statusHTML += `
-                <div class="temperature-display">
-                    <div class="temp-card">
-                        <div class="temp-label">Current</div>
-                        <div class="temp-value">${Math.round(currentTemp)}°F</div>
-                    </div>
-                    <div class="temp-card">
-                        <div class="temp-label">24hr Low</div>
-                        <div class="temp-value">${Math.round(minTemp)}°F</div>
-                    </div>
-                    <div class="temp-card">
-                        <div class="temp-label">24hr High</div>
-                        <div class="temp-value">${Math.round(maxTemp)}°F</div>
-                    </div>
-                </div>
-            `;
+                const currentTemp = next24Hours[0];
+                const min24hr = Math.min(...next24Hours);
 
-            statusContainer.innerHTML = statusHTML;
+                // Check 10-day forecast for any frost events
+                let nextFrostDate = null;
+                let nextFrostTemp = null;
+                let nextFrostType = null;
+                const frostDays = [];
 
-            // Show hourly forecast if there are freezing hours
-            if (freezingHours.length > 0) {
-                let forecastHTML = '<div class="forecast-hours"><h3>❄️ Freezing Hours:</h3>';
-                freezingHours.forEach(hour => {
-                    forecastHTML += `
-                        <div class="hour-item freezing-hour">
-                            <span>${hour.time}</span>
-                            <span>${hour.temp}°F</span>
+                for (let i = 0; i < data.daily.time.length; i++) {
+                    const minTemp = data.daily.temperature_2m_min[i];
+                    if (minTemp <= 32) {
+                        const freezeType = getFreezeType(minTemp);
+                        frostDays.push({
+                            date: data.daily.time[i],
+                            minTemp: minTemp,
+                            type: freezeType
+                        });
+                        
+                        if (!nextFrostDate) {
+                            nextFrostDate = data.daily.time[i];
+                            nextFrostTemp = minTemp;
+                            nextFrostType = freezeType;
+                        }
+                    }
+                }
+
+                // Display status based on findings
+                let statusHTML = '';
+                
+                if (hardFreezeIn24) {
+                    statusHTML = `
+                        <div class="status-card alert-hard-freeze">
+                            <div class="status-icon">🥶</div>
+                            <div class="status-message">HARD FREEZE WARNING!</div>
+                            <div class="status-details">
+                                Temperatures will drop to <strong>${Math.round(min24hr)}°F</strong> in the next 24 hours!
+                                <br><strong>This will damage or kill most plants.</strong>
+                                <br>Take immediate action to protect ALL vulnerable plants.
+                            </div>
                         </div>
                     `;
-                });
-                forecastHTML += '</div>';
-                forecastContainer.innerHTML = forecastHTML;
-            }
+                } else if (lightFreezeIn24) {
+                    statusHTML = `
+                        <div class="status-card alert-light-freeze">
+                            <div class="status-icon">❄️</div>
+                            <div class="status-message">Light Freeze Warning</div>
+                            <div class="status-details">
+                                Temperatures will drop to <strong>${Math.round(min24hr)}°F</strong> in the next 24 hours.
+                                <br>Tender plants need protection, but hardy vegetables may survive.
+                            </div>
+                        </div>
+                    `;
+                } else if (nextFrostDate) {
+                    const frostDateFormatted = formatDate(nextFrostDate);
+                    const freezeTypeText = nextFrostType === 'hard' ? 'Hard Freeze' : 'Light Freeze';
+                    
+                    statusHTML = `
+                        <div class="status-card alert-warning">
+                            <div class="status-icon">⚠️</div>
+                            <div class="status-message">Frost in Forecast</div>
+                            <div class="status-details">
+                                No freeze tonight, but <strong>${freezeTypeText}</strong> expected:
+                                <br><strong>${frostDateFormatted}</strong>
+                                <br>Low of ${Math.round(nextFrostTemp)}°F
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    statusHTML = `
+                        <div class="status-card alert-safe">
+                            <div class="status-icon">✅</div>
+                            <div class="status-message">No Frost Risk</div>
+                            <div class="status-details">
+                                Your garden is safe! No freezing temperatures in the 10-day forecast.
+                                <br>Enjoy your gardening!
+                            </div>
+                        </div>
+                    `;
+                }
 
-        } catch (error) {
-            console.error('Error:', error);
-            
-            let errorMessage = 'Unable to check weather. ';
-            if (error.code === 1) {
-                errorMessage += 'Please enable location access.';
-            } else if (error.message === 'Weather service unavailable') {
-                errorMessage += 'Weather service is temporarily unavailable.';
+                statusHTML += `
+                    <div class="temperature-display">
+                        <div class="temp-card">
+                            <div class="temp-label">Current</div>
+                            <div class="temp-value">${Math.round(currentTemp)}°F</div>
+                        </div>
+                        <div class="temp-card">
+                            <div class="temp-label">Tonight's Low</div>
+                            <div class="temp-value">${Math.round(min24hr)}°F</div>
+                        </div>
+                    </div>
+                `;
+
+                statusContainer.innerHTML = statusHTML;
+
+                // Show all frost events in forecast
+                if (frostDays.length > 0) {
+                    let forecastHTML = '<div class="forecast-card"><h3>🌡️ Frost Events in 10-Day Forecast:</h3>';
+                    
+                    frostDays.forEach(frost => {
+                        const dateFormatted = formatDate(frost.date);
+                        const freezeTypeText = frost.type === 'hard' ? 'Hard Freeze' : 'Light Freeze';
+                        const icon = frost.type === 'hard' ? '🥶' : '❄️';
+                        
+                        forecastHTML += `
+                            <div class="freeze-type-info">
+                                <div class="freeze-type-title">${icon} ${dateFormatted}</div>
+                                <div class="freeze-type-desc">
+                                    ${freezeTypeText} - Low of ${Math.round(frost.minTemp)}°F
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    forecastHTML += '</div>';
+                    forecastContainer.innerHTML = forecastHTML;
+                }
+
+                // Show tips based on freeze type
+                if (hardFreezeIn24 || lightFreezeIn24 || nextFrostDate) {
+                    let tipsHTML = '<div class="tips">';
+                    
+                    // Add freeze type explanations
+                    tipsHTML += `
+                        <h3>🌡️ Understanding Freeze Types:</h3>
+                        <div class="plant-info">
+                            <h4>Light Freeze (29-32°F)</h4>
+                            <p>
+                                <strong>Hardy plants that can survive:</strong> Kale, collards, Brussels sprouts, cabbage, broccoli, cauliflower, turnips, beets, carrots, lettuce (under row cover)
+                                <br><strong>Must protect:</strong> Tomatoes, peppers, basil, squash, cucumbers, beans
+                            </p>
+                        </div>
+                        <div class="plant-info" style="background: #fef5e7; border-color: #f39c12;">
+                            <h4>Hard Freeze (Below 29°F)</h4>
+                            <p>
+                                <strong>Only the hardiest survive:</strong> Kale, collards, Brussels sprouts (may need protection below 25°F)
+                                <br><strong>Everything else needs protection or harvesting!</strong>
+                            </p>
+                        </div>
+                    `;
+                    
+                    if (hardFreezeIn24 || lightFreezeIn24) {
+                        tipsHTML += `
+                            <h3>🛡️ Immediate Protection Actions:</h3>
+                            <ul>
+                                <li>Cover plants with frost cloth, old sheets, or blankets before sunset</li>
+                                <li>Water thoroughly - moist soil retains heat better</li>
+                                <li>Harvest ripe produce and tender herbs now</li>
+                                <li>Move containers to protected areas</li>
+                                <li>Add mulch for insulation</li>
+                                ${hardFreezeIn24 ? '<li><strong>For hard freeze: Double-layer coverings or bring plants indoors</strong></li>' : ''}
+                            </ul>
+                        `;
+                    }
+                    
+                    tipsHTML += '</div>';
+                    tipsContainer.innerHTML = tipsHTML;
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                
+                let errorMessage = 'Unable to check weather. ';
+                if (error.code === 1) {
+                    errorMessage += 'Please enable location access.';
+                } else if (error.message === 'Weather service unavailable') {
+                    errorMessage += 'Weather service is temporarily unavailable.';
+                } else {
+                    errorMessage += 'Please try again.';
+                }
+                
+                statusContainer.innerHTML = `<div class="error">${errorMessage}</div>`;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Check on page load
+        window.addEventListener('load', () => {
+            if ('geolocation' in navigator) {
+                // Ready to use
             } else {
-                errorMessage += 'Please try again.';
+                document.getElementById('statusContainer').innerHTML = 
+                    '<div class="error">Geolocation is not supported by your browser.</div>';
             }
-            
-            statusContainer.innerHTML = `<div class="error">${errorMessage}</div>`;
-        } finally {
-            button.disabled = false;
-        }
-    }
-
-    // Check on page load
-    window.addEventListener('load', () => {
-        // Auto-check if geolocation is available
-        if ('geolocation' in navigator) {
-            // Optionally auto-check on load
-            // checkWeather();
-        } else {
-            document.getElementById('statusContainer').innerHTML = 
-                '<div class="error">Geolocation is not supported by your browser.</div>';
-        }
-    });
-</script>
-
-
+        });
+    </script>
 </body>
 </html>
